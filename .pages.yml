@@ -82,6 +82,7 @@ content:
       - name: image
         label: Image(s)
         type: image
+        multiple: true
       - name: note
         label: Personal note (optional)
         type: rich-text

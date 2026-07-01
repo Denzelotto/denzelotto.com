@@ -13,7 +13,7 @@
         <div class="work-detail-grid">
           <div class="work-image-col">
             {% if page.image %}
-              {% assign images = page.image | split: "," %}
+              {% assign images = page.image | join: "," | split: "," %}
               <img
                 src="{{ images[0] | strip | relative_url }}"
                 alt="{{ page.title }}"
@@ -50,6 +50,10 @@
               <dd>{{ page.medium }}</dd>
               <dt>Dimensions</dt>
               <dd>{{ page.dimensions }}</dd>
+              {% if page.date %}
+                <dt>Acquired</dt>
+                <dd>{{ page.date | date: "%B %Y" }}</dd>
+              {% endif %}
             </dl>
             {% if page.note %}
               <div class="work-note">{{ page.note | markdownify }}</div>
@@ -62,7 +66,7 @@
   </div>
   <script src="{{ '/assets/js/lightbox.js' | relative_url }}"></script>
   {% if page.image %}
-    {% assign images = page.image | split: "," %}
+    {% assign images = page.image | join: "," | split: "," %}
     {% if images.size > 1 %}
       <script src="{{ '/assets/js/work-gallery.js' | relative_url }}"></script>
     {% endif %}
