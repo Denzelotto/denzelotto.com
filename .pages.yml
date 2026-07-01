@@ -1,0 +1,87 @@
+media: assets/images
+
+content:
+  - name: essays
+    label: Essays
+    type: collection
+    path: _essays
+    view:
+      fields: [title, date]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+        options:
+          format: YYYY-MM-DD
+      - name: dek
+        label: Standfirst (optional short intro)
+        type: string
+      - name: language
+        label: Language
+        type: select
+        options:
+          values:
+            - value: en
+              label: English
+            - value: nl
+              label: Nederlands
+      - name: body
+        label: Essay text
+        type: rich-text
+
+  - name: works
+    label: Collection
+    type: collection
+    path: _works
+    view:
+      fields: [title, artist, year]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: artist
+        label: Artist
+        type: string
+        required: true
+      - name: year
+        label: Year
+        type: string
+        required: true
+      - name: medium
+        label: Medium
+        type: string
+      - name: dimensions
+        label: Dimensions
+        type: string
+      - name: date
+        label: Acquisition date (used for ordering)
+        type: date
+        options:
+          format: YYYY-MM-DD
+      - name: image
+        label: Image(s)
+        type: image
+      - name: note
+        label: Personal note (optional)
+        type: rich-text
+
+  - name: about
+    label: About me
+    type: file
+    path: about/index.md
+    fields:
+      - name: photo
+        label: Photo
+        type: image
+      - name: photo_caption
+        label: Photo caption
+        type: string
+      - name: body
+        label: Text
+        type: rich-text

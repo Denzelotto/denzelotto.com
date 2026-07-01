@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="{% if page.language %}{{ page.language }}{% else %}en{% endif %}">
+<head>
+  {% include head.html %}
+</head>
+<body>
+  {% include small-screen.html %}
+  <div class="site-wrap">
+    {% include header.html %}
+    <main class="main-content">
+      <article class="essay">
+        <a href="{{ '/essays/' | relative_url }}" class="back-link">← Essays</a>
+        <h1 class="essay-title">{{ page.title }}</h1>
+        <div class="essay-rule"></div>
+        <div class="essay-meta">{{ page.date | date: "%B %Y" }}</div>
+        <div class="essay-body" data-essay-body>
+          {{ content }}
+        </div>
+      </article>
+    </main>
+    {% include footer.html %}
+  </div>
+  <script src="{{ '/assets/js/essay-figures.js' | relative_url }}"></script>
+</body>
+</html>

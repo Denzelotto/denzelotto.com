@@ -1,0 +1,20 @@
+---
+layout: default
+title: Essays
+---
+<div class="essays-overview">
+  <h2 class="page-heading">Essays</h2>
+  <div class="essays-list">
+    {% assign sorted_essays = site.essays | sort: "date" | reverse %}
+    {% for essay in sorted_essays %}
+      <a href="{{ essay.url | relative_url }}" class="essay-row">
+        <span class="essay-row-date">{{ essay.date | date: "%B %Y" }}</span>
+        <span class="essay-row-body">
+          <span class="essay-row-title">{{ essay.title }}</span>
+          {% if essay.dek %}<span class="essay-row-dek">{{ essay.dek }}</span>{% endif %}
+        </span>
+      </a>
+    {% endfor %}
+    <div class="essays-list-cap"></div>
+  </div>
+</div>

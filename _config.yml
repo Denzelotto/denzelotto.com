@@ -1,0 +1,41 @@
+title: Denzel Otto
+url: "https://denzelotto.com"
+baseurl: ""
+
+# Collections
+collections:
+  works:
+    output: true
+    permalink: /collection/:slug/
+  essays:
+    output: true
+    permalink: /essays/:slug/
+
+defaults:
+  - scope:
+      path: ""
+      type: "works"
+    values:
+      layout: "work"
+  - scope:
+      path: ""
+      type: "essays"
+    values:
+      layout: "essay"
+
+# Build
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+plugins:
+  - jekyll-seo-tag
+
+# Exclude
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - prompt.md
+  - node_modules
+  - vendor

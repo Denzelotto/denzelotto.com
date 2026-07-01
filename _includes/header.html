@@ -1,0 +1,10 @@
+<header class="site-header">
+  <div class="header-inner">
+    <a href="{{ '/' | relative_url }}" class="site-name">Denzel Otto</a>
+    <nav class="site-nav">
+      <a href="{{ '/collection/' | relative_url }}" class="nav-link{% if page.url contains '/collection' %} nav-link--current{% endif %}">Collection</a>
+      <a href="{{ '/essays/' | relative_url }}" class="nav-link{% if page.url contains '/essays' %} nav-link--current{% endif %}">Essays</a>
+      <a href="{{ '/about/' | relative_url }}" class="nav-link{% if page.url contains '/about' %} nav-link--current{% endif %}">About me</a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include head.html %}
+</head>
+<body>
+  {% include small-screen.html %}
+  <div class="site-wrap">
+    {% include header.html %}
+    <main class="main-content">
+      <div class="work-detail">
+        <a href="{{ '/collection/' | relative_url }}" class="back-link">← Collection</a>
+        <div class="work-detail-grid">
+          <div class="work-image-col">
+            {% if page.image %}
+              {% assign images = page.image | split: "," %}
+              <img
+                src="{{ images[0] | strip | relative_url }}"
+                alt="{{ page.title }}"
+                class="work-main-image"
+                id="work-main-image"
+              >
+              {% if images.size > 1 %}
+                <div class="work-thumbs" id="work-thumbs">
+                  {% for img in images %}
+                    <button
+                      class="work-thumb{% if forloop.first %} work-thumb--active{% endif %}"
+                      data-src="{{ img | strip | relative_url }}"
+                      data-index="{{ forloop.index0 }}"
+                      aria-label="View image {{ forloop.index }}"
+                    >
+                      <img src="{{ img | strip | relative_url }}" alt="View {{ forloop.index }}">
+                    </button>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% else %}
+              <div class="work-image-placeholder">
+                <span>artwork</span>
+              </div>
+            {% endif %}
+          </div>
+          <div class="work-meta-col">
+            <div class="work-title-serif">{{ page.title }}</div>
+            <div class="work-artist">{{ page.artist }}</div>
+            <dl class="work-dl">
+              <dt>Year</dt>
+              <dd>{{ page.year }}</dd>
+              <dt>Medium</dt>
+              <dd>{{ page.medium }}</dd>
+              <dt>Dimensions</dt>
+              <dd>{{ page.dimensions }}</dd>
+            </dl>
+            {% if page.note %}
+              <div class="work-note">{{ page.note | markdownify }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </main>
+    {% include footer.html %}
+  </div>
+  {% if page.image %}
+    {% assign images = page.image | split: "," %}
+    {% if images.size > 1 %}
+      <script src="{{ '/assets/js/work-gallery.js' | relative_url }}"></script>
+    {% endif %}
+  {% endif %}
+</body>
+</html>

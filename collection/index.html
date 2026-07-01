@@ -1,0 +1,24 @@
+---
+layout: default
+title: Collection
+---
+<div class="collection-overview">
+  <h2 class="page-heading">Collection</h2>
+  <div class="works-grid">
+    {% assign sorted_works = site.works | sort: "date" | reverse %}
+    {% for work in sorted_works %}
+      <a href="{{ work.url | relative_url }}" class="work-card">
+        <div class="work-card-image">
+          {% if work.image %}
+            {% assign first_image = work.image | split: "," | first %}
+            <img src="{{ first_image | strip | relative_url }}" alt="{{ work.title }}">
+          {% else %}
+            <div class="work-card-placeholder"><span>artwork</span></div>
+          {% endif %}
+        </div>
+        <div class="work-card-title">{{ work.title }}</div>
+        <div class="work-card-sub">{{ work.artist }}, {{ work.year }}</div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
