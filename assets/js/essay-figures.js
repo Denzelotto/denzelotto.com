@@ -1,4 +1,6 @@
 (function () {
+  var STICKY_TOP = 80; // px from viewport top when sticking
+
   var body = document.querySelector('[data-essay-body]');
   if (!body) return;
 
@@ -6,7 +8,7 @@
     return n.nodeType === Node.ELEMENT_NODE;
   });
 
-  // Returns all rail images from a node if it is an image-only block.
+  // Returns all images from a node if it is an image-only block.
   function extractRailImgs(node) {
     var tag = node.tagName ? node.tagName.toLowerCase() : '';
     if (tag === 'img') return [node];
@@ -24,7 +26,6 @@
   // Group nodes into reigns: text nodes then their trailing images.
   var reigns = [];
   var current = { nodes: [], imgs: [] };
-
   nodes.forEach(function (node) {
     var railImgs = extractRailImgs(node);
     if (railImgs.length > 0) {
@@ -41,8 +42,6 @@
     reigns.push(current);
   }
 
-  // Build layout: continuous text flow on the left, rail on the right.
-  // The rail uses absolute positioning so it never affects text column height.
   body.innerHTML = '';
 
   var textFlow = document.createElement('div');
@@ -53,7 +52,7 @@
 
   var figNum = 0;
   var nodeCount = 0;
-  var figureGroups = []; // { el, anchorIndex } — anchored to last text node before imgs
+  var figureGroups = [];
 
   reigns.forEach(function (reign) {
     reign.nodes.forEach(function (n) {
@@ -62,6 +61,11 @@
     });
 
     if (reign.imgs.length > 0) {
+      // Each figure group gets its own section — an absolutely-positioned
+      // container that acts as the sticky boundary.
+      var section = document.createElement('div');
+      section.className = 'essay-rail-section';
+
       var group = document.createElement('div');
       group.className = 'essay-figure-group';
 
@@ -83,33 +87,53 @@
         group.appendChild(figure);
       });
 
-      rail.appendChild(group);
-      figureGroups.push({ el: group, anchorIndex: Math.max(0, nodeCount - 1) });
+      section.appendChild(group);
+      rail.appendChild(section);
+      figureGroups.push({
+        section: section,
+        group: group,
+        anchorIndex: Math.max(0, nodeCount - 1)
+      });
     }
   });
 
   body.appendChild(textFlow);
   body.appendChild(rail);
 
-  // Position figure groups in the rail, aligned to their anchor text node.
-  // Run after the browser has laid out the text flow.
   function positionFigures() {
     var textNodes = Array.from(textFlow.children);
+    var totalHeight = textFlow.offsetHeight;
     var prevBottom = 0;
 
-    figureGroups.forEach(function (item) {
+    figureGroups.forEach(function (item, i) {
       var anchor = textNodes[item.anchorIndex];
-      var intended = anchor ? anchor.offsetTop : 0;
-      var top = Math.max(intended, prevBottom);
-      item.el.style.top = top + 'px';
-      prevBottom = top + item.el.offsetHeight + 28;
+      var anchorTop = anchor ? anchor.offsetTop : 0;
+
+      var nextItem = figureGroups[i + 1];
+      var nextAnchor = nextItem ? textNodes[nextItem.anchorIndex] : null;
+      var nextTop = nextAnchor ? nextAnchor.offsetTop : totalHeight;
+
+      var groupHeight = item.group.offsetHeight;
+
+      // Section must not overlap the previous one, and must be tall enough
+      // for sticky to have a meaningful range (groupHeight + STICKY_TOP + gap).
+      var sectionTop = Math.max(anchorTop, prevBottom);
+      var sectionHeight = Math.max(nextTop - anchorTop, groupHeight + STICKY_TOP + 20);
+
+      item.section.style.top = sectionTop + 'px';
+      item.section.style.height = sectionHeight + 'px';
+
+      prevBottom = sectionTop + sectionHeight;
     });
+
+    // Keep the rail from stretching the grid row beyond the text column.
+    rail.style.height = totalHeight + 'px';
   }
 
-  // Double rAF ensures layout is complete before measuring.
+  // Double rAF for layout; load event catches Firefox image-height timing.
   requestAnimationFrame(function () {
     requestAnimationFrame(positionFigures);
   });
-
+  window.addEventListener('load', positionFigures);
   window.addEventListener('resize', positionFigures);
 })();

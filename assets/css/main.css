@@ -484,14 +484,21 @@ img { display: block; max-width: 100%; height: auto; }
 
 .essay-text-flow p:last-child { margin-bottom: 0; }
 
-/* Rail is a fixed-width column; figures are absolutely placed inside it */
+/* Rail: position context for absolutely-placed sections */
 .essay-rail {
   position: relative;
 }
 
-.essay-figure-group {
+/* Each section is absolutely positioned; its height = the sticky range */
+.essay-rail-section {
   position: absolute;
   width: 100%;
+}
+
+/* Figure group sticks within its section until the section exits the viewport */
+.essay-figure-group {
+  position: sticky;
+  top: 80px;
 }
 
 .essay-figure {
