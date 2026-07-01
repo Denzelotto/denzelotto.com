@@ -3,8 +3,7 @@ layout: default
 title: Essays
 ---
 <div class="essays-overview">
-  <h2 class="page-heading">Essays</h2>
-  <div class="essays-list">
+<div class="essays-list">
     {% assign sorted_essays = site.essays | sort: "date" | reverse %}
     {% for essay in sorted_essays %}
       <a href="{{ essay.url | relative_url }}" class="essay-row">
