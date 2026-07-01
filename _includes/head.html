@@ -2,4 +2,5 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% if page.title %}{{ page.title }} — Denzel Otto{% else %}Denzel Otto{% endif %}</title>
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+{% if page.thumbnail %}<meta property="og:image" content="{{ page.thumbnail | absolute_url }}">{% endif %}
 {% seo %}

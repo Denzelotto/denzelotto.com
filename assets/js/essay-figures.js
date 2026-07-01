@@ -1,59 +1,55 @@
 (function () {
-  // Transforms the essay body: pulls each <img> out of the prose flow
-  // and places it in a right-rail figure column, top-aligned with the
-  // paragraph it followed. Figures are auto-numbered.
-
   var body = document.querySelector('[data-essay-body]');
   if (!body) return;
 
-  // Collect all top-level children (paragraphs + images)
   var nodes = Array.from(body.childNodes).filter(function (n) {
     return n.nodeType === Node.ELEMENT_NODE;
   });
 
-  // Walk nodes and group into "reigns":
-  // A reign = one image (or null) + the paragraphs that precede/follow it
-  // before the next image. Images must directly follow a <p>.
+  function extractImg(node) {
+    var tag = node.tagName ? node.tagName.toLowerCase() : '';
+    if (tag === 'img') return node;
+    if (tag === 'figure') return node.querySelector('img');
+    if (tag === 'p') return node.querySelector('img');
+    return null;
+  }
+
+  function isStandaloneImage(node) {
+    var tag = node.tagName ? node.tagName.toLowerCase() : '';
+    if (tag === 'img') return true;
+    if (tag === 'figure') return !!node.querySelector('img');
+    if (tag === 'p') {
+      var imgs = node.querySelectorAll('img');
+      if (imgs.length !== 1) return false;
+      // Only an image (and optional alt/whitespace) — no real text
+      return node.textContent.trim() === '' || node.childNodes.length <= 2;
+    }
+    return false;
+  }
+
+  // Group nodes into reigns: each reign = text paragraphs + trailing images.
+  // Consecutive standalone images all belong to the same reign's rail.
   var reigns = [];
-  var current = { paras: [], img: null };
+  var current = { paras: [], imgs: [] };
 
   nodes.forEach(function (node) {
-    var tag = node.tagName ? node.tagName.toLowerCase() : '';
-    if (tag === 'p') {
-      // Check if the only child (or only meaningful child) is an <img>
-      var imgs = node.querySelectorAll('img');
-      var textContent = node.textContent.trim();
-      if (imgs.length === 1 && textContent === '') {
-        // Standalone image paragraph — close current reign, attach image
-        current.img = imgs[0];
-        reigns.push(current);
-        current = { paras: [], img: null };
-      } else if (imgs.length === 1 && node.childNodes.length <= 2) {
-        // Image with alt text only — treat same as standalone
-        current.img = imgs[0];
-        reigns.push(current);
-        current = { paras: [], img: null };
-      } else {
-        current.paras.push(node);
-      }
-    } else if (tag === 'figure' || tag === 'img') {
-      var img = tag === 'img' ? node : node.querySelector('img');
-      if (img) {
-        current.img = img;
-        reigns.push(current);
-        current = { paras: [], img: null };
-      }
+    if (isStandaloneImage(node)) {
+      var img = extractImg(node);
+      if (img) current.imgs.push(img);
     } else {
+      // Flush accumulated images into the current reign before starting prose
+      if (current.imgs.length > 0) {
+        reigns.push(current);
+        current = { paras: [], imgs: [] };
+      }
       current.paras.push(node);
     }
   });
 
-  // Flush trailing reign (may have no image)
-  if (current.paras.length > 0 || current.img) {
+  if (current.paras.length > 0 || current.imgs.length > 0) {
     reigns.push(current);
   }
 
-  // Clear the body and rebuild with reign grid rows
   body.innerHTML = '';
 
   var figNum = 0;
@@ -69,12 +65,12 @@
     var railCol = document.createElement('div');
     railCol.className = 'essay-reign-rail';
 
-    if (reign.img) {
+    reign.imgs.forEach(function (imgNode) {
       figNum++;
       var figure = document.createElement('figure');
       figure.className = 'essay-figure';
 
-      var img = reign.img.cloneNode(true);
+      var img = imgNode.cloneNode(true);
       figure.appendChild(img);
 
       var cap = document.createElement('figcaption');
@@ -82,13 +78,13 @@
       numSpan.className = 'fig-num';
       numSpan.textContent = 'fig. ' + figNum;
       cap.appendChild(numSpan);
-      if (reign.img.alt) {
-        cap.appendChild(document.createTextNode(' — ' + reign.img.alt));
+      if (imgNode.alt) {
+        cap.appendChild(document.createTextNode(' — ' + imgNode.alt));
       }
       figure.appendChild(cap);
 
       railCol.appendChild(figure);
-    }
+    });
 
     row.appendChild(textCol);
     row.appendChild(railCol);

@@ -18,6 +18,9 @@ content:
         required: true
         options:
           format: yyyy-MM-dd
+      - name: thumbnail
+        label: Thumbnail (used for social sharing)
+        type: image
       - name: dek
         label: Standfirst (optional short intro)
         type: string
