@@ -461,21 +461,19 @@ img { display: block; max-width: 100%; height: auto; }
   text-align: right;
 }
 
-/* Figure rail layout — set up by essay-figures.js */
+/* Figure rail layout — rebuilt by essay-figures.js */
 .essay-body {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Each reign row */
-.essay-reign {
   display: grid;
   grid-template-columns: minmax(0, 33em) 300px;
   column-gap: 56px;
-  align-items: stretch;
+  align-items: start;
 }
 
-.essay-reign-text p {
+.essay-text-flow {
+  position: relative; /* offsetParent for paragraph measurement */
+}
+
+.essay-text-flow p {
   margin: 0 0 24px;
   font-family: "Newsreader", Georgia, serif;
   font-size: 19px;
@@ -484,19 +482,24 @@ img { display: block; max-width: 100%; height: auto; }
   text-wrap: pretty;
 }
 
-.essay-reign-text p:last-child { margin-bottom: 0; }
+.essay-text-flow p:last-child { margin-bottom: 0; }
 
-.essay-reign-rail { position: relative; }
+/* Rail is a fixed-width column; figures are absolutely placed inside it */
+.essay-rail {
+  position: relative;
+}
+
+.essay-figure-group {
+  position: absolute;
+  width: 100%;
+}
 
 .essay-figure {
-  position: sticky;
-  top: 120px;
   margin: 0;
 }
 
 .essay-figure + .essay-figure {
   margin-top: 28px;
-  position: static;
 }
 
 .essay-figure img {

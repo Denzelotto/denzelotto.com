@@ -6,9 +6,7 @@
     return n.nodeType === Node.ELEMENT_NODE;
   });
 
-  // Returns all images from a node if it is a standalone image block
-  // (a <p> containing only <img> tags, or a bare <img> or <figure>).
-  // Returns [] if the node has real text content mixed in.
+  // Returns all rail images from a node if it is an image-only block.
   function extractRailImgs(node) {
     var tag = node.tagName ? node.tagName.toLowerCase() : '';
     if (tag === 'img') return [node];
@@ -18,18 +16,14 @@
     }
     if (tag === 'p') {
       var imgs = Array.from(node.querySelectorAll('img'));
-      if (imgs.length === 0) return [];
-      // Only images — no real text content
-      if (node.textContent.trim() === '') return imgs;
+      if (imgs.length > 0 && node.textContent.trim() === '') return imgs;
     }
     return [];
   }
 
-  // Group nodes into reigns: text paragraphs + their trailing rail images.
-  // Consecutive standalone image nodes (including multi-image <p> blocks)
-  // all collect into the same reign.
+  // Group nodes into reigns: text nodes then their trailing images.
   var reigns = [];
-  var current = { paras: [], imgs: [] };
+  var current = { nodes: [], imgs: [] };
 
   nodes.forEach(function (node) {
     var railImgs = extractRailImgs(node);
@@ -38,54 +32,84 @@
     } else {
       if (current.imgs.length > 0) {
         reigns.push(current);
-        current = { paras: [], imgs: [] };
+        current = { nodes: [], imgs: [] };
       }
-      current.paras.push(node);
+      current.nodes.push(node);
     }
   });
-
-  if (current.paras.length > 0 || current.imgs.length > 0) {
+  if (current.nodes.length > 0 || current.imgs.length > 0) {
     reigns.push(current);
   }
 
+  // Build layout: continuous text flow on the left, rail on the right.
+  // The rail uses absolute positioning so it never affects text column height.
   body.innerHTML = '';
 
+  var textFlow = document.createElement('div');
+  textFlow.className = 'essay-text-flow';
+
+  var rail = document.createElement('div');
+  rail.className = 'essay-rail';
+
   var figNum = 0;
+  var nodeCount = 0;
+  var figureGroups = []; // { el, anchorIndex } — anchored to last text node before imgs
 
   reigns.forEach(function (reign) {
-    var row = document.createElement('div');
-    row.className = 'essay-reign';
-
-    var textCol = document.createElement('div');
-    textCol.className = 'essay-reign-text';
-    reign.paras.forEach(function (p) { textCol.appendChild(p); });
-
-    var railCol = document.createElement('div');
-    railCol.className = 'essay-reign-rail';
-
-    reign.imgs.forEach(function (imgNode) {
-      figNum++;
-      var figure = document.createElement('figure');
-      figure.className = 'essay-figure';
-
-      var img = imgNode.cloneNode(true);
-      figure.appendChild(img);
-
-      var cap = document.createElement('figcaption');
-      var numSpan = document.createElement('span');
-      numSpan.className = 'fig-num';
-      numSpan.textContent = 'fig. ' + figNum;
-      cap.appendChild(numSpan);
-      if (imgNode.alt) {
-        cap.appendChild(document.createTextNode(' — ' + imgNode.alt));
-      }
-      figure.appendChild(cap);
-
-      railCol.appendChild(figure);
+    reign.nodes.forEach(function (n) {
+      textFlow.appendChild(n);
+      nodeCount++;
     });
 
-    row.appendChild(textCol);
-    row.appendChild(railCol);
-    body.appendChild(row);
+    if (reign.imgs.length > 0) {
+      var group = document.createElement('div');
+      group.className = 'essay-figure-group';
+
+      reign.imgs.forEach(function (imgNode) {
+        figNum++;
+        var figure = document.createElement('figure');
+        figure.className = 'essay-figure';
+        figure.appendChild(imgNode.cloneNode(true));
+
+        var cap = document.createElement('figcaption');
+        var numSpan = document.createElement('span');
+        numSpan.className = 'fig-num';
+        numSpan.textContent = 'fig. ' + figNum;
+        cap.appendChild(numSpan);
+        if (imgNode.alt) {
+          cap.appendChild(document.createTextNode(' — ' + imgNode.alt));
+        }
+        figure.appendChild(cap);
+        group.appendChild(figure);
+      });
+
+      rail.appendChild(group);
+      figureGroups.push({ el: group, anchorIndex: Math.max(0, nodeCount - 1) });
+    }
   });
+
+  body.appendChild(textFlow);
+  body.appendChild(rail);
+
+  // Position figure groups in the rail, aligned to their anchor text node.
+  // Run after the browser has laid out the text flow.
+  function positionFigures() {
+    var textNodes = Array.from(textFlow.children);
+    var prevBottom = 0;
+
+    figureGroups.forEach(function (item) {
+      var anchor = textNodes[item.anchorIndex];
+      var intended = anchor ? anchor.offsetTop : 0;
+      var top = Math.max(intended, prevBottom);
+      item.el.style.top = top + 'px';
+      prevBottom = top + item.el.offsetHeight + 28;
+    });
+  }
+
+  // Double rAF ensures layout is complete before measuring.
+  requestAnimationFrame(function () {
+    requestAnimationFrame(positionFigures);
+  });
+
+  window.addEventListener('resize', positionFigures);
 })();
