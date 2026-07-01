@@ -6,6 +6,7 @@ content:
     type: collection
     path: _essays
     filename: "{fields.slug}"
+    extension: md
     view:
       fields: [title, date]
     fields:
@@ -47,6 +48,7 @@ content:
     type: collection
     path: _works
     filename: "{fields.slug}"
+    extension: md
     view:
       fields: [title, artist, year]
     fields:
