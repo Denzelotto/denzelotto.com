@@ -1,6 +1,7 @@
 ---
 layout: essay
 title: Notes on Slowness
+slug: notes-on-slowness
 date: 2026-03-01
 dek: On the tempo of looking, and what a painting asks of the patient eye.
 language: en

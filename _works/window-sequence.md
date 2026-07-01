@@ -1,6 +1,7 @@
 ---
 layout: work
 title: Window Sequence
+slug: window-sequence
 artist: Mira Halle
 year: "2024"
 medium: Oil on panel

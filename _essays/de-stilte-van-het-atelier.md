@@ -1,5 +1,6 @@
 ---
 title: De stilte van het atelier
+slug: de-stilte-van-het-atelier
 date: 2026-01-10
 dek: Over werkruimtes, afwezigheid en het spoor van de hand.
 language: nl

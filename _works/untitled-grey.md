@@ -1,6 +1,7 @@
 ---
 layout: work
 title: "Untitled (Grey)"
+slug: untitled-grey
 artist: Nadia Roos
 year: "2023"
 medium: Acrylic on board
