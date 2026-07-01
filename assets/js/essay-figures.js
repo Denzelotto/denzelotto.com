@@ -6,38 +6,36 @@
     return n.nodeType === Node.ELEMENT_NODE;
   });
 
-  function extractImg(node) {
+  // Returns all images from a node if it is a standalone image block
+  // (a <p> containing only <img> tags, or a bare <img> or <figure>).
+  // Returns [] if the node has real text content mixed in.
+  function extractRailImgs(node) {
     var tag = node.tagName ? node.tagName.toLowerCase() : '';
-    if (tag === 'img') return node;
-    if (tag === 'figure') return node.querySelector('img');
-    if (tag === 'p') return node.querySelector('img');
-    return null;
-  }
-
-  function isStandaloneImage(node) {
-    var tag = node.tagName ? node.tagName.toLowerCase() : '';
-    if (tag === 'img') return true;
-    if (tag === 'figure') return !!node.querySelector('img');
-    if (tag === 'p') {
-      var imgs = node.querySelectorAll('img');
-      if (imgs.length !== 1) return false;
-      // Only an image (and optional alt/whitespace) — no real text
-      return node.textContent.trim() === '' || node.childNodes.length <= 2;
+    if (tag === 'img') return [node];
+    if (tag === 'figure') {
+      var img = node.querySelector('img');
+      return img ? [img] : [];
     }
-    return false;
+    if (tag === 'p') {
+      var imgs = Array.from(node.querySelectorAll('img'));
+      if (imgs.length === 0) return [];
+      // Only images — no real text content
+      if (node.textContent.trim() === '') return imgs;
+    }
+    return [];
   }
 
-  // Group nodes into reigns: each reign = text paragraphs + trailing images.
-  // Consecutive standalone images all belong to the same reign's rail.
+  // Group nodes into reigns: text paragraphs + their trailing rail images.
+  // Consecutive standalone image nodes (including multi-image <p> blocks)
+  // all collect into the same reign.
   var reigns = [];
   var current = { paras: [], imgs: [] };
 
   nodes.forEach(function (node) {
-    if (isStandaloneImage(node)) {
-      var img = extractImg(node);
-      if (img) current.imgs.push(img);
+    var railImgs = extractRailImgs(node);
+    if (railImgs.length > 0) {
+      railImgs.forEach(function (img) { current.imgs.push(img); });
     } else {
-      // Flush accumulated images into the current reign before starting prose
       if (current.imgs.length > 0) {
         reigns.push(current);
         current = { paras: [], imgs: [] };
