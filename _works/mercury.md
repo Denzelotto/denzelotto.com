@@ -7,7 +7,7 @@ medium: " engraving on laid paper "
 dimensions: "plate: 25.6 × 17.8 cm"
 date: 2025-04-01
 image:
-  - /assets/images/1779708256000_R0000639.jpg
+  - /assets/images/1779708256000_R0000639 2.jpg
 thumbnail_focus: center
 note: >-
   Me Dys commendat facunde gratia lingue, / Et varia rudibus monstro mortalibus
