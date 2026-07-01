@@ -10,4 +10,9 @@
       thumb.classList.add('work-thumb--active');
     });
   });
+
+  // Clicking the main image opens the lightbox with the current src
+  mainImg.addEventListener('click', function () {
+    if (window.Lightbox) window.Lightbox.open(mainImg.src, mainImg.alt);
+  });
 })();

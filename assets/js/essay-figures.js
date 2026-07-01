@@ -74,7 +74,9 @@
         figNum++;
         var figure = document.createElement('figure');
         figure.className = 'essay-figure';
-        figure.appendChild(imgNode.cloneNode(true));
+        var cloned = imgNode.cloneNode(true);
+        cloned.classList.add('js-lb');
+        figure.appendChild(cloned);
 
         var cap = document.createElement('figcaption');
         var numSpan = document.createElement('span');

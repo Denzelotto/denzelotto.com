@@ -17,7 +17,7 @@
               <img
                 src="{{ images[0] | strip | relative_url }}"
                 alt="{{ page.title }}"
-                class="work-main-image"
+                class="work-main-image js-lb"
                 id="work-main-image"
               >
               {% if images.size > 1 %}
@@ -60,6 +60,7 @@
     </main>
     {% include footer.html %}
   </div>
+  <script src="{{ '/assets/js/lightbox.js' | relative_url }}"></script>
   {% if page.image %}
     {% assign images = page.image | split: "," %}
     {% if images.size > 1 %}
