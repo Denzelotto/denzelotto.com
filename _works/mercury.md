@@ -1,5 +1,5 @@
 ---
-title: Mercury Presiding Over the Visual and Rhetoric Arts
+title: Mercury Presiding Over the Arts
 slug: mercury
 artist: Jan Pietersz Saenredam, after Hendrick Goltzius
 year: "1596"
