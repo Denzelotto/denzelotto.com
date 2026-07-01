@@ -1,4 +1,5 @@
 ---
+layout: about
 photo: /assets/images/IMG_0218.jpg
 photo_caption: Denzel Otto, Leuven, 2025
 ---

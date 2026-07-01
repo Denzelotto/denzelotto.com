@@ -22,6 +22,10 @@ defaults:
       type: "essays"
     values:
       layout: "essay"
+  - scope:
+      path: "about"
+    values:
+      layout: "about"
 
 # Build
 markdown: kramdown
