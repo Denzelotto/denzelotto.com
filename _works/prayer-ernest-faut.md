@@ -6,6 +6,6 @@ year: "1930"
 medium: Oil paint on canvas
 date: 2026-07-01
 image:
-  - /assets/images/IMG_4661 2.webp
-thumbnail_focus: left
+  - /assets/images/1781001831000_R0001182.jpg
+thumbnail_focus: center
 ---
