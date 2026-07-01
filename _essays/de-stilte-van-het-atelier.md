@@ -6,6 +6,8 @@ language: nl
 ---
 Een atelier is een kamer die wacht. Niet op de kunstenaar — die is er al dan niet — maar op het werk dat er gedaan zal worden, of net gedaan is. De stilte is geen afwezigheid van geluid. Het is een soort gespannen verwachting die aan de muren hangt. Ijeijfeiojaofdij dsajfoiewjfoieajf. dsafoiewjfoiajeflijsaoifjsaofjsofj.dsafjoiewajfoiaejfoijeafoijeaoifj. ifdsaojoiejfoij ads ifjsaoifjeoifj asjfoia jfoiajdsoifjsad oifjasd oifjas dfj dsajfaoidsjfoidsa fsad fjasd oifjsad fjasoidfjoisadjfoisadjfais djfoisad jfoisadfj jidsaoi fjoiasjdf j.
 
+![foto 1](/assets/images/LBT114-20.webp)
+![foto 2](/assets/images/LBT114-20.webp)
 ![gekkere foto](/assets/images/LBT114-20.webp)
 
 Een atelier is een kamer die wacht. Niet op de kunstenaar — die is er al dan niet — maar op het werk dat er gedaan zal worden, of net gedaan is. De stilte is geen afwezigheid van geluid. Het is een soort gespannen verwachting die aan de muren hangt. Ijeijfeiojaofdij dsajfoiewjfoieajf. dsafoiewjfoiajeflijsaoifjsaofjsofj.dsafjoiewajfoiaejfoijeafoijeaoifj. ifdsaojoiejfoij ads ifjsaoifjeoifj asjfoia jfoiajdsoifjsad oifjasd oifjas dfj dsajfaoidsjfoidsa fsad fjasd oifjsad fjasoidfjoisadjfoisadjfais djfoisad jfoisadfj jidsaoi fjoiasjdf j.
