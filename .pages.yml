@@ -17,7 +17,7 @@ content:
         type: date
         required: true
         options:
-          format: YYYY-MM-DD
+          format: yyyy-MM-dd
       - name: dek
         label: Standfirst (optional short intro)
         type: string
@@ -63,7 +63,7 @@ content:
         label: Acquisition date (used for ordering)
         type: date
         options:
-          format: YYYY-MM-DD
+          format: yyyy-MM-dd
       - name: image
         label: Image(s)
         type: image
