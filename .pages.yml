@@ -82,7 +82,9 @@ content:
       - name: image
         label: Image(s)
         type: image
-        multiple: true
+        options:
+          multiple:
+            max: 10
       - name: note
         label: Personal note (optional)
         type: rich-text
