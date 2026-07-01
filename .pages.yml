@@ -83,6 +83,21 @@ content:
         options:
           multiple:
             max: 10
+      - name: thumbnail_focus
+        label: Thumbnail focus
+        type: select
+        options:
+          values:
+            - value: center
+              label: Center (default)
+            - value: top
+              label: Top
+            - value: bottom
+              label: Bottom
+            - value: left
+              label: Left
+            - value: right
+              label: Right
       - name: note
         label: Personal note (optional)
         type: rich-text

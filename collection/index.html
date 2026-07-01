@@ -10,7 +10,8 @@ title: Collection
         <div class="work-card-image">
           {% if work.image %}
             {% assign first_image = work.image | join: "," | split: "," | first %}
-            <img src="{{ first_image | strip | relative_url }}" alt="{{ work.title }}">
+            {% assign focus = work.thumbnail_focus | default: "center" %}
+            <img src="{{ first_image | strip | relative_url }}" alt="{{ work.title }}" style="object-position: {{ focus }};">
           {% else %}
             <div class="work-card-placeholder"><span>artwork</span></div>
           {% endif %}
