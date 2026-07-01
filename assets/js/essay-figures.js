@@ -1,5 +1,6 @@
 (function () {
   var STICKY_TOP = 80; // px from viewport top when sticking
+  var FIGURE_GAP = 28; // gap between images — matches CSS .essay-figure + .essay-figure margin
 
   var body = document.querySelector('[data-essay-body]');
   if (!body) return;
@@ -115,9 +116,11 @@
 
       var groupHeight = item.group.offsetHeight;
 
-      // Section must not overlap the previous one, and must be tall enough
-      // for sticky to have a meaningful range (groupHeight + STICKY_TOP + gap).
-      var sectionTop = Math.max(anchorTop, prevBottom);
+      // Each section starts FIGURE_GAP px after the previous ends, so the gap
+      // between the last image of one group and the first of the next stays
+      // consistent with the within-group gap set in CSS.
+      var gap = i === 0 ? 0 : FIGURE_GAP;
+      var sectionTop = Math.max(anchorTop, prevBottom + gap);
       var sectionHeight = Math.max(nextTop - anchorTop, groupHeight + STICKY_TOP + 20);
 
       item.section.style.top = sectionTop + 'px';
